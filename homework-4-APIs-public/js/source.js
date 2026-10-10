@@ -10,8 +10,9 @@ function formatPercentage(value) {
   return `${(value * 100).toFixed(2)}%`;
 }
 
-localStorage.setItem("game_id", "");
-localStorage.setItem("api_key", "");
+//I can modify this code right????
+localStorage.setItem("game_id", ""); //Breath of the Wild ID here
+localStorage.setItem("api_key", ""); // gamebrainAPI key here
 
 
 
@@ -22,19 +23,23 @@ async function load(){
     let apiKey = localStorage.getItem("api_key");
     
     // **************** Write you code below **************** 
+    //Variables for game and newsData
+    let game;       //For Step 1
+    let newsData;   //For Step 2
 
+    //----------------------------------------------
     //Step 1: Hero section
     // fetch fav game data from the API
     //Botw info
     const gameResponse = await fetch(`https://api.gamebrain.co/v1/games/${gameID}?api-key=${apiKey}`);
-    const game = await gameResponse.json();
+    game = await gameResponse.json();
 
     // 1.a game title
     document.querySelector(".game-info h1").textContent = game.title;
 
     // 1.b game artwork
-    const gameArtwork = game.artwork_url;
-    document.querySelector(".game-info img").src = gameArtwork;
+    const gameImg = game.img_url;
+    document.querySelector(".game-info img").src = gameImg;
 
     // 1.c release date (using formatYearFromStr() function for year only )
     const gameReleaseYear = formatYearFromStr(game.release_date);
@@ -47,15 +52,15 @@ async function load(){
     //----------------------------------------------
     //Step 2: Game News Section
     const newsResponse = await fetch(`https://gamebrain.co{gameID}/news?api-key=${apiKey}`);
-    const newsData = await newsResponse.json();
+    newsData = await newsResponse.json();
 
     // Select all existing news cards in the grid layout
     const newsCards = document.querySelectorAll(".news-list .news-card");
 
     // Loop thru cards up to limit of 3
     newsCards.forEach((card, index) => {
-        if (index < 3 && newsData[index]) {
-            const article = newsData[index];
+        if (index < 3 && newsData[index]) {     //index less than 3 and news exists
+            const article = newsData[index];    //Get the news article at the current index
 
             // 2.a title
             card.querySelector(".news-title").textContent = article.title;
@@ -64,7 +69,7 @@ async function load(){
             card.querySelector(".news-date").textContent = formatYearFromStr(article.published_at);
 
             // 2.c artwork/image
-            card.querySelector("img").src = article.image_url;
+            card.querySelector("img").src = article.img_url;
         }
         else {
           //Hide extra layout cards if API returns fewer than 3 newa
@@ -72,15 +77,10 @@ async function load(){
         }
     });
 
-
     // Add at least 3 new items
     // 2.a title
-
     // 2.b Display when the news was published
-
     // 2.c artwork/image
-
-
 
     //----------------------------------------------
     //Step 3. Similar Games Section
@@ -100,9 +100,11 @@ async function load(){
             card.querySelector(".game-name").textContent = item.name;
 
           // 3.b year (using the integer part of the value returned as the year)
+          // AKA take the decimal part off from floating point string years
             card.querySelector(".game-year").textContent = Math.floor(item.release_date);
 
           // 3.c rating > mean (using formatPercentage() function)
+          // This converts the rating to a percentage format from float (ex. 0.)
             card.querySelector(".game-rating").textContent = formatPercentage(item.rating);
 
           // 3.d screenshot (1 img)
@@ -117,13 +119,6 @@ async function load(){
     // 3.b year (using the integer part of the value returned as the year)
     // 3.c rating > mean (using formatPercentage() function)
     // 3.d screenshot (1 img)
-
-
-
-
-
-
-
 
 
 }
