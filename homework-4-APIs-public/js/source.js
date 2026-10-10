@@ -11,8 +11,8 @@ function formatPercentage(value) {
 }
 
 //I can modify this code right????
-localStorage.setItem("game_id", ""); //Breath of the Wild ID here
-localStorage.setItem("api_key", ""); // gamebrainAPI key here
+localStorage.setItem("game_id", "q=Breath+of+the+wild"); //Breath of the Wild ID here
+localStorage.setItem("api_key", "b41e1fe34fd640f2b5924a56b1bf4796"); // gamebrainAPI key here
 
 
 
@@ -27,10 +27,16 @@ async function load(){
     let game;       //For Step 1
     let newsData;   //For Step 2
 
+    //REMEMBER TO ADD THESE:
+      //add Endpoints for game and news APIs
+      //add Functions for fetching and processing game and news data
+      //Use Methods to manipulate and display the fetched data
+
     //----------------------------------------------
     //Step 1: Hero section
     // fetch fav game data from the API
     //Botw info
+      //Use Game Details Endpoint
     const gameResponse = await fetch(`https://api.gamebrain.co/v1/games/${gameID}?api-key=${apiKey}`);
     game = await gameResponse.json();
 
@@ -51,7 +57,8 @@ async function load(){
 
     //----------------------------------------------
     //Step 2: Game News Section
-    const newsResponse = await fetch(`https://gamebrain.co{gameID}/news?api-key=${apiKey}`);
+      //Use Game News Endpoint
+    const newsResponse = await fetch(`https://gamebrain.co/v1/games/${gameID}/news?api-key=${apiKey}`);
     newsData = await newsResponse.json();
 
     // Select all existing news cards in the grid layout
