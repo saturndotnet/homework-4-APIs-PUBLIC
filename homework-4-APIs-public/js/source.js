@@ -25,48 +25,67 @@ async function load(){
 
     //Step 1: Hero section
     // fetch fav game data from the API
-    const gameResponse = await fetch(
-      `https://api.gamebrain.co/v1/games/${gameID}?api-key=${apiKey}`);
-
+    //Botw info
+    const gameResponse = await fetch(`https://api.gamebrain.co/v1/games/${gameID}?api-key=${apiKey}`);
     const game = await gameResponse.json();
 
-    console.log(game);
+    // 1.a game title
+    document.querySelector(".game-info h1").textContent = game.title;
 
-    // display game title only 
-    const gameTitle = game.title;
-    console.log(`Title: ${gameTitle}`);
-
-    // display game artwork
+    // 1.b game artwork
     const gameArtwork = game.artwork_url;
-    console.log(`Artwork URL: ${gameArtwork}`);
+    document.querySelector(".game-info img").src = gameArtwork;
 
-    // display release date (using formatYearFromStr() function for year only )
+    // 1.c release date (using formatYearFromStr() function for year only )
     const gameReleaseYear = formatYearFromStr(game.release_date);
-    console.log(`Release Year: ${gameReleaseYear}`);
+    document.querySelector(".game-info .release-year").textContent = gameReleaseYear;
 
-    // display genre
+    // 1.d genre
     const gameGenre = game.genre;
-    console.log(`Genre: ${gameGenre}`);
+    document.querySelector(".game-info .genre").textContent = gameGenre;
 
     //----------------------------------------------
     //Step 2: Game News Section
+    const newsResponse = await fetch(`https://gamebrain.co{gameID}/news?api-key=${apiKey}`);
+    const newsData = await newsResponse.json();
+
+    // Select all existing news cards in the grid layout
+    const newsCards = document.querySelectorAll(".news-list .news-card");
+
+    // Loop thru cards up to limit of 3
+    newsCards.forEach((card, index) => {
+        if (index < 3 && newsData[index]) {
+            const article = newsData[index];
+
+            // 2.a title
+            card.querySelector(".news-title").textContent = article.title;
+
+            // 2.b Display when the news was published
+            card.querySelector(".news-date").textContent = formatYearFromStr(article.published_at);
+
+            // 2.c artwork/image
+            card.querySelector("img").src = article.image_url;
+        }
+    });
+
+
     // Add at least 3 new items
-    // Display title
+    // 2.a title
 
-    // Display when the news was published
+    // 2.b Display when the news was published
 
-    // Display artwork/image
+    // 2.c artwork/image
 
 
 
     //----------------------------------------------
     //Step 3. Similar Games Section
     // Add at least 4 similar game items
-    
-    // Display name
-    // Display year (using the integer part of the value returned as the year)
-    // Display rating > mean (using formatPercentage() function)
-    // Display screenshot (1 img)
+
+    // 3.a name
+    // 3.b year (using the integer part of the value returned as the year)
+    // 3.c rating > mean (using formatPercentage() function)
+    // 3.d screenshot (1 img)
 
 
 
